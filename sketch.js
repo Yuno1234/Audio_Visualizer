@@ -10,8 +10,8 @@ function preload() {
 function setup() {
     createCanvas(windowWidth, windowHeight);
     angleMode(DEGREES)
+    song.setVolume(0.3)
     fft = new p5.FFT()
-    console.log(fft);
 }
 
 function draw() {
@@ -30,6 +30,7 @@ function draw() {
             particles[i].update(amp > 235)
             particles[i].show()
             particles[i].lines(particles)
+            particles[i].repel()
         } else {
             particles.splice(i, 1)
         }
@@ -38,6 +39,8 @@ function draw() {
     stroke(255);
     strokeWeight(2);
     noFill();
+
+    var my = map(mouseY, 0, width, 0.5, 2)
 
     var spectrum = fft.linAverages(150)
     for (var t = -1; t <= 1; t += 2) {
@@ -56,22 +59,21 @@ function draw() {
             // outer
             var x2 = r2 * sin(angle) * t;
             var y2 = r2 * cos(angle);
-            line(x1, y1, x2, y2)
 
-            
+            line(x1, y1, x2, y2)
         }
         endShape()
     } 
 
-
-    var wave = fft.waveform()
+    var mx = map(mouseX, width/2, width, 0.5, 3);
+    var wave = fft.waveform();
     
     for (var t = -1; t <= 1; t += 2) {
         beginShape()
         for (var i = 0; i <= 180; i += 0.5) {
             var index = floor(map(i, 0, width/4, 0, wave.length - 1));
 
-            var r = map(wave[index], -1, 1, 150, 350)
+            var r = map(wave[index]*mx, -1, 1, 150, 350)
             
             var x = r * sin(i) * t;
             var y = r * cos(i);
@@ -79,6 +81,7 @@ function draw() {
         }
         endShape()
     }
+    
 }
 
 
@@ -99,13 +102,6 @@ class Particle {
             this.pos.add(this.vel);
             this.pos.add(this.vel);
         }
-
-        // const d = dist(this.pos.x, this.pos.y, mouseX, mouseY)
-        // if (d <= 100) {
-        //     this.pos.add(this.vel);
-        //     this.pos.add(this.vel);
-        //     this.pos.add(this.vel);
-        // }
     }
 
     edges() {
@@ -131,6 +127,15 @@ class Particle {
                 line(this.pos.x, this.pos.y, particle.pos.x, particle.pos.y);
             }
         });
+    }
+
+    repel() { 
+        const d = dist(this.pos.x, this.pos.y, mouseX-width/2, mouseY-height/2)
+        if (d <= 150) {
+            for (var i = 0; i < 7; i++) {
+                this.pos.add(this.vel);
+            }
+        }
     }
 }
 
