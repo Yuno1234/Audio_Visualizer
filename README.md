@@ -1,11 +1,6 @@
 # Audio_Visualizer
 ![Banner image](https://github.com/Yuno1234/Audio_Visualizer/blob/main/audio_visualizer.png)
 
-## Table of contents
-* [General info](#general-info)
-* [Technologies](#technologies)
-* [Setup](#setup)
-
 ## General info
 This project is a interactive audio visualizer using the p5.js.sound library.
 	
