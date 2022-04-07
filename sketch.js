@@ -4,7 +4,7 @@ let particles = [];
 
 
 function preload() {
-    song = loadSound("assets/Ambiance.mp3")
+    song = loadSound("Ambiance.mp3")
 }
 
 function setup() {
